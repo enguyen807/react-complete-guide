@@ -1,0 +1,22 @@
+.Card{
+  border: 1px solid #eee;
+  box-shadow: 0 2px 3px #ccc;
+  padding: 16px;
+  text-align: left;
+}
+
+fieldset div {
+  display: flex;
+  flex-flow: column;
+  align-items: stretch;
+  align-content: space-between;
+  margin: 20px;
+}
+
+.Box {
+  background-color: #eee;
+  height: auto;
+  display: flex;
+  flex-flow: column;
+  padding: 10px 35px;
+}

@@ -1,73 +1,106 @@
 import React, { Component } from "react";
 import "./App.css";
 
-import Person from "./Person/Person";
+import Input from "./Input/Input";
+import Validation from "./Validation/Validation";
+import Char from "./Char/Char";
 
 class App extends Component {
   state = {
-    persons: [
-      {name: "Eric", age: 27},
-      {name: "Bob", age: 23},
-      {name: "Susan",age: 25},
+
+    users: [
+      {
+        id: "1",
+        username: "waterstar",
+        password: "password",
+        bio: "Lorem Ipsum",
+      },
+      {
+        id: "2",
+        username: "enguyen",
+        password: "password",
+        bio: "Lorem Ipsum",
+      },
+      {
+        id: "3",
+        username: "tullutt",
+        password: "password",
+        bio: "Lorem Ipsum",
+      },
     ],
   };
 
-  switchNameHandler = (newName) => {
-    // this.state.persons[0].name = 'Erick';
-    this.setState({
-      persons: [
-        {name: newName,age: 28},
-        {name: "Bob",age: 24},
-        {name: "Susan",age: 26},
-      ],
+  inputChangedHandler = (e, id) => {
+    const userIndex = this.state.users.findIndex((u) => {
+      return u.id === id;
     });
+
+    console.log(userIndex)
+    const property = e.target.id.toLowerCase();
+
+    console.log('/*********************/')
+    const user = { ...this.state.users[userIndex] };
+    console.log(user)
+    user[property] = e.target.value;
+    console.log(user)
+
+    console.log('/*********************/')
+    const users = [...this.state.users];
+    console.log(users)
+    users[userIndex] = user;
+    console.log(users)
+
+    this.setState({ users: users });
   };
 
-  nameChangedHandler = (e) => {
-    this.setState({
-      persons: [
-        {name: "Eric",age: 28},
-        {name: e.target.value,age: 24},
-        {name: "Susan",age: 26},
-      ],
+  deleteCharHandler = (id, index) => {  
+    const user0 = this.state.users[0]
+    const userBio = user0.bio.split("");
+    userBio.splice(index, 1)
+
+    const updatedBio = userBio.join('')
+
+    const userIndex = this.state.users.findIndex((u) => {
+      return u.id === id;
     });
+
+    const user = { ...this.state.users[userIndex] };
+    user.bio = updatedBio;
+
+    const users = [...this.state.users];
+    users[userIndex] = user;
+
+    this.setState({users: users})
   }
 
   render() {
-    const style = {
-      backgroundColor: 'white',
-      font: 'inherit',
-      border: '1px solid green',
-      padding: '8px',
-      cursor: 'pointer'
-    }
+    let userCard = null;
+    let charList = this.state.users[0].bio.split("").map((ch, index) => {
+      return <Char key={index} character={ch} clicked={()=>this.deleteCharHandler(this.state.users[0].id, index)}/>;
+    });
+
+    userCard = (
+      <div className="columns">
+        {this.state.users.map((user) => {
+          return (
+            <div>
+              <Input
+                username={user.username}
+                password={user.password}
+                bio={user.bio}
+                key={user.id}
+                changed={(e) => this.inputChangedHandler(e, user.id)}
+              />
+              <Validation inputLength={user.password.length} />
+            </div>
+          );
+        })}
+      </div>
+    );
 
     return (
       <div className="App">
-        <h1>Hi, I'm a React App</h1>
-        <button 
-          style={style}
-          onClick={() => this.switchNameHandler("Donald")}>
-          Switch Name
-        </button>
-        <Person
-          name={this.state.persons[0].name}
-          age={this.state.persons[0].age}
-        >
-          Ma meeldib jaakohv!
-        </Person>
-        <Person
-          name={this.state.persons[1].name}
-          age={this.state.persons[1].age}
-          click={this.switchNameHandler.bind(this, "Erick")}
-          changed={this.nameChangedHandler}
-        >
-          Ma meeldib Jaapani laule kuulata!
-        </Person>
-        <Person
-          name={this.state.persons[2].name}
-          age={this.state.persons[2].age}
-        ></Person>
+        {userCard} {charList}
       </div>
     );
   }
