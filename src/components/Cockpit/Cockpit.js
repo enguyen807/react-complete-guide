@@ -1,8 +1,37 @@
-import React from "react";
+// Functional Component
+import React, { useEffect } from "react";
 
 import classes from "./Cockpit.css";
 
 const cockpit = (props) => {
+  useEffect(
+    () => {
+      // Runs on every update, on component created
+      // Can use http request here
+      console.log("[Cockpit.js] useEffect");
+      setTimeout(() => {
+        alert("Saved data to cloud!");
+      }, 1000);
+
+      return () => {
+        console.log("[Cockpit.js] cleanup work in useEffect");
+      };
+    },
+
+    // Passing a second arg as an array with a list of used variables
+    // will customize when useEffect runs i.e. props.persons
+    // Passing an empty array will only run useEffect once
+    []
+  );
+
+  // Can use useEffect() as many times as you want
+  useEffect(() => {
+    console.log("[Cockpit.js] 2nd useEffect");
+    return () => {
+      console.log("[Cockpit.js] cleanup work in 2nd useEffect");
+    };
+  });
+
   const assignedClasses = [];
   let btnClass = "";
   if (props.showPersons) {
@@ -17,7 +46,7 @@ const cockpit = (props) => {
 
   return (
     <div className={classes.Cockpit}>
-      <h1>Hi, I'm a React App</h1>
+      <h1>{props.title}</h1>
       <p className={assignedClasses.join(" ")}>This is really working!</p>
       <button className={btnClass} onClick={props.clicked}>
         Toggle Persons
