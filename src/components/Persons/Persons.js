@@ -1,8 +1,10 @@
-import React, { Component } from "react";
+import React, { PureComponent } from "react";
 
 import Person from "./Person/Person";
 
-class Persons extends Component {
+// PureComponent is a normal component that does a shallow comparison of props and state
+
+class Persons extends PureComponent {
   // Modern way for componentWillReceiveProps
   // static getDerivedStateFromProps(props, state) {
   //   console.log("[Persons.js] getDerivedStateFromProps");
@@ -14,12 +16,19 @@ class Persons extends Component {
   //   console.log('[Persons.js] componentWillReceiveProps', props)
   // }
 
-  shouldComponentUpdate(nextProps, nextState) {
-    // compare props with previous props
-    // must return true or false
-    console.log("[Persons.js] shouldComponentUpdate");
-    return true;
-  }
+  // Only available in class based components 
+  // If parent components updates and child component doesnt need to update 
+  // add shouldComponentUpdate
+  // shouldComponentUpdate(nextProps, nextState) {
+  //   // compare props with previous props
+  //   // must return true or false
+  //   console.log("[Persons.js] shouldComponentUpdate");
+  //   if (nextProps.persons !== this.props.persons) {
+  //     return true;
+  //   } else {
+  //     return false;
+  //   }
+  // }
 
   getSnapshotBeforeUpdate(prevProps, prevState) {
     console.log("[Persons.js] getSnapshotBeforeUpdate");
