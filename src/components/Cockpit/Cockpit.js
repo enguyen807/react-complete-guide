@@ -1,18 +1,26 @@
 // Functional Component
-import React, { useEffect } from "react";
+import React, { useEffect, useRef, useContext } from "react";
+
+import AuthContext from "../../context/auth-context";
 
 import classes from "./Cockpit.css";
 
 const cockpit = (props) => {
+  const toggleBtnRef = useRef(null);
+  // Better way then wrapping jsx with <AuthContext.Consumer></AuthContext.Consumer>
+  const authContext = useContext(AuthContext);
+
+  console.log(authContext.authenticated);
+
   useEffect(
     () => {
       // Runs on every update, on component created
       // Can use http request here
       console.log("[Cockpit.js] useEffect");
-      setTimeout(() => {
-        alert("Saved data to cloud!");
-      }, 1000);
-
+      // setTimeout(() => {
+      //   alert("Saved data to cloud!");
+      // }, 1000);
+      toggleBtnRef.current.click();
       return () => {
         console.log("[Cockpit.js] cleanup work in useEffect");
       };
@@ -48,14 +56,16 @@ const cockpit = (props) => {
     <div className={classes.Cockpit}>
       <h1>{props.title}</h1>
       <p className={assignedClasses.join(" ")}>This is really working!</p>
-      <button className={btnClass} onClick={props.clicked}>
+      <button ref={toggleBtnRef} className={btnClass} onClick={props.clicked}>
         Toggle Persons
       </button>
+
+      <button onClick={authContext.login}>Log in</button>
     </div>
   );
 };
 
 // .memo will store a snapshot of this component and only rerender if inputs changes
 // Wrap functional components with React.memo
-// Only add if Child component is a standalone from parent component 
+// Only add if Child component is a standalone from parent component
 export default React.memo(cockpit);
